@@ -15,10 +15,10 @@ function db_conn(){
 
         //localhost以外＊＊自分で書き直してください！！＊＊
         if($_SERVER["HTTP_HOST"] != 'localhost'){
-            $db_name = "";  //データベース名
-            $db_id   = "";  //アカウント名（さくらコントロールパネルに表示されています）
-            $db_pw   = "";  //パスワード(さくらサーバー最初にDB作成する際に設定したパスワード)
-            $db_host = "localhost"; //例）mysql**db.ne.jp...
+            $db_name = "ryuki0414_gs_db_kadai";  //データベース名
+            $db_id   = "ryuki0414";  //アカウント名（さくらコントロールパネルに表示されています）
+            $db_pw   = "ryuki0414_";  //パスワード(さくらサーバー最初にDB作成する際に設定したパスワード)
+            $db_host = "mysql57.ryuki0414.sakura.ne.jp"; //例）mysql**db.ne.jp...
         }
         return new PDO('mysql:dbname='.$db_name.';charset=utf8;host='.$db_host, $db_id, $db_pw);
     } catch (PDOException $e) {
