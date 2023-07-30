@@ -1,30 +1,28 @@
 <?php
-//1.  DB接続します
-try {
-  //Password:MAMP='root',XAMPP=''
-  $pdo = new PDO('*******:dbname=****;charset=utf8;host=*****','****','*****');
-} catch (PDOException $e) {
-  exit('***************'.$e->getMessage());
-}
+include("funcs.php");  //funcs.phpを読み込む（関数群）
+$pdo = db_conn();      //DB接続関数
 
 //２．データ登録SQL作成
-$stmt = $pdo->prepare("************* *****");
-$status = $stmt->execute();
+$stmt   = $pdo->prepare("SELECT * FROM gs_bm_table"); //SQLをセット
+$status = $stmt->execute(); //SQLを実行→エラーの場合falseを$statusに代入
 
 //３．データ表示
-$view="";
+$view=""; //HTML文字列作り、入れる変数
 if($status==false) {
-    //execute（SQL実行時にエラーがある場合）
-  $error = $stmt->errorInfo();
-  exit("**********:".$error[2]);
-
+  //SQLエラーの場合
+  sql_error($stmt);
 }else{
-  //Selectデータの数だけ自動でループしてくれる
-  //FETCH_ASSOC=http://php.net/manual/ja/pdostatement.fetch.php
-  while( $res = $stmt->fetch(PDO::FETCH_ASSOC)){
-    $view .= "**********";
+  //SQL成功の場合
+  while( $r = $stmt->fetch(PDO::FETCH_ASSOC)){ //データ取得数分繰り返す
+    //以下でリンクの文字列を作成, $r["id"]でidをdetail.phpに渡しています
+    $view .= '<a href="bm_update_view.php?id='.h($r["id"]).'">';
+    $view .= h($r["id"])."|".h($r["name"])."|".h($r["url"])."|".h($r["comment"]);
+    $view .= '</a>';
+    $view .= '<a href="delete.php?id='.h($r["id"]).'">';
+    $view .= '[削除]';
+    $view .= '</a>';
+    $view .= '<br>';
   }
-
 }
 ?>
 
@@ -35,7 +33,7 @@ if($status==false) {
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>フリーアンケート表示</title>
+<title>データ編集画面</title>
 <link rel="stylesheet" href="css/range.css">
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <style>div{padding: 10px;font-size:16px;}</style>
@@ -46,7 +44,7 @@ if($status==false) {
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-      <a class="navbar-brand" href="index.php">データ登録</a>
+      <a class="navbar-brand" href="kadai_index.php">データ登録</a>
       </div>
     </div>
   </nav>
@@ -55,7 +53,7 @@ if($status==false) {
 
 <!-- Main[Start] -->
 <div>
-    <div class="container jumbotron"><?=**********?></div>
+    <div class="container jumbotron"><?=$view?></div>
 </div>
 <!-- Main[End] -->
 
