@@ -1,4 +1,8 @@
 <?php
+
+//0. SESSION開始！！
+session_start();
+
 //1. POSTデータ取得
 $id   = $_GET["id"];
 
